@@ -44,10 +44,11 @@ function getOneDayWeather(latitude, longitude) {
         console.log(data.current.temp);
         var currentTemp = (data.temp - 273.15) * (9 / 5) + 32;
         console.log(data.current.uvi);
+        var currentUV = data.
         var currentUVI = data.current.uvi;
         //  get date and time
         console.log(data.current.dt);
-        var currentDateTime = data.current.dt;
+        var currentDateTime = new Date(data.current.dt * 1000);
         // get wind direction and speed
         console.log(data.current.wind_deg);
         console.log(data.current.wind_speed);
@@ -85,6 +86,7 @@ function getOneDayWeather(latitude, longitude) {
           var dailyTemp = data.daily[i].temp.day;
 
           console.log(data.daily[i].uvi);
+          var UVI = data.daily[i].UVI;
           // get date time
           console.log(data.daily[i].dt);
           var dailyDateTime = data.daily[i].weather[0].main;
