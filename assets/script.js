@@ -6,6 +6,7 @@ var one_call_api;
 var latitude;
 var longitude;
 var part = "minutely,hourly";
+var mainDiv = document.getElementById("main");
 
 function getCoordinates() {
   five_day_api = `https://api.openweathermap.org/data/2.5/forecast?q=${city_name}&appid=${my_api}`;
@@ -42,8 +43,8 @@ function getOneDayWeather(latitude, longitude) {
         // GET TEMP!
         console.log(data.current.temp);
         var currentTemp = (data.temp - 273.15) * (9 / 5) + 32;
-        // CONVERT K TO F
-        var temperature = (data.temp - 273.15) * (9 / 5) + 32;
+        console.log(data.current.uvi);
+        var currentUVI = data.current.uvi;
         //  get date and time
         console.log(data.current.dt);
         var currentDateTime = data.current.dt;
@@ -55,6 +56,23 @@ function getOneDayWeather(latitude, longitude) {
         console.log(data.current.weather[0].main);
         var currentStatus = data.current.weather[0].main;
 
+        var currentWeatherResults = document.createElement("div");
+        currentWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
+      <div class="card-header bg-transparent border-success">Header</div>
+      <div class="card-body text-success">
+        <h5 class="card-title">${city_name}</h5>
+        <p class="card-text">${currentStatus}</p>
+        <p class="card-text">${currentTemp}</p>
+        <p class="card-text">${currentUVI}</p>
+        <p class="card-text">${currentHumidity}</p>
+        <p class="card-text">${currentWindSpeed}</p>
+        <p class="card-text">${currentWindDir}</p>
+        
+        </div>
+      </div>`;
+
+        mainDiv.appendChild(currentWeatherResults);
+
         console.log(data.daily);
 
         for (var i = 1; i <= 5; i++) {
@@ -65,6 +83,8 @@ function getOneDayWeather(latitude, longitude) {
           // get day time temp
           console.log(data.daily[i].temp.day);
           var dailyTemp = data.daily[i].temp.day;
+
+          console.log(data.daily[i].uvi);
           // get date time
           console.log(data.daily[i].dt);
           var dailyDateTime = data.daily[i].weather[0].main;
@@ -77,6 +97,23 @@ function getOneDayWeather(latitude, longitude) {
 
           var dailyWindSpeed = data.daily[i].wind_speed;
           var dailyWindDir = data.daily[i].wind_deg;
+
+          var dailytWeatherResults = document.createElement("div");
+          dailytWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
+      <div class="card-header bg-transparent border-success">Header</div>
+      <div class="card-body text-success">
+        <h5 class="card-title">${city_name}</h5>
+        <p class="card-text">${dailyStatus}</p>
+        <p class="card-text">${dailyTemp}</p>
+        <p class="card-text">${dailyUVI}</p>
+        <p class="card-text">${dailyHumidity}</p>
+        <p class="card-text">${dailyWindSpeed}</p>
+        <p class="card-text">${dailyWindDir}</p>
+        
+        </div>
+      </div>`;
+
+          mainDiv.appendChild(currentWeatherResults);
         }
       });
     }
