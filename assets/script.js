@@ -61,12 +61,13 @@ function getOneDayWeather(latitude, longitude) {
         console.log(data.current.weather[0].main);
         var currentStatus = data.current.weather[0].main;
         var currentIcon = data.current.weather[0].icon;
-        var currentIcon = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
+        var currentIconURL = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
 
         var currentWeatherResults = document.createElement("div");
         currentWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
       <div class="card-header bg-transparent border-success">Header</div>
       <div class="card-body text-success">
+      <div><img src="${currentIconURL}" alt="Weather icon"></div>
         <h5 class="card-title">${city_name}</h5>
         <p class="card-text">${currentStatus}</p>
         <p class="card-text">${currentTemp}F</p>
@@ -89,7 +90,9 @@ function getOneDayWeather(latitude, longitude) {
           var dailyHumidity = data.daily[i].humidity;
           // get day time temp
           console.log(data.daily[i].temp.day);
-          var dailyTemp = Math.round(data.daily[i].temp.day);
+          var dailyTemp = Math.round(
+            (data.current.temp - 273.15) * (9 / 5) + 32
+          );
 
           console.log(data.daily[i].uvi);
           var UVI = data.daily[i].UVI;
@@ -103,8 +106,8 @@ function getOneDayWeather(latitude, longitude) {
           var dailyStatus = data.daily[i].weather[0].main;
           // get the icon
           console.log(data.daily[i].weather[0].icon);
-          var dailyIcon = data.daily[i].weather.icon;
-          var currentIconURL = `http://openweathermap.org/img/wn/${currentIconURL}@2x.png`;
+          var dailyIcon = data.daily[i].weather[0].icon;
+          var dailyIconURL = `http://openweathermap.org/img/wn/${dailyIcon}@2x.png`;
 
           var dailyUVI = data.daily[i].uvi;
           var dailyWindSpeed = Math.round(data.daily[i].wind_speed);
@@ -113,7 +116,8 @@ function getOneDayWeather(latitude, longitude) {
           var dailyWeatherResults = document.createElement("div");
           dailyWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
       <div class="card-header bg-transparent border-success">${dailyDateTime}</div>
-      <div class="card-body text-success">
+      <div> <img src= "${dailyIconURL}"></div>
+      <div class="card-body text-success col-12">
         <h5 class="card-title">${city_name}</h5>
         <p class="card-text">${dailyStatus}</p>
         <p class="card-text">${dailyTemp}</p>
