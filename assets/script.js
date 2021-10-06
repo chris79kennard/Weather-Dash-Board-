@@ -42,20 +42,26 @@ function getOneDayWeather(latitude, longitude) {
 
         // GET TEMP!
         console.log(data.current.temp);
-        var currentTemp = (data.temp - 273.15) * (9 / 5) + 32;
+        var currentTemp = Math.round(
+          (data.current.temp - 273.15) * (9 / 5) + 32
+        );
         console.log(data.current.uvi);
-        var currentUV = data.
+
         var currentUVI = data.current.uvi;
         //  get date and time
         console.log(data.current.dt);
         var currentDateTime = new Date(data.current.dt * 1000);
+        currentDateTime = currentDateTime.toLocaleDateString("en-US");
+
         // get wind direction and speed
         console.log(data.current.wind_deg);
         console.log(data.current.wind_speed);
         var currentWindDir = data.current.wind_deg;
-        var currentWindSpeed = data.current.wind_speed;
+        var currentWindSpeed = Math.round(data.current.wind_speed);
         console.log(data.current.weather[0].main);
         var currentStatus = data.current.weather[0].main;
+        var currentIcon = data.current.weather[0].icon;
+        var currentIcon = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
 
         var currentWeatherResults = document.createElement("div");
         currentWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
@@ -63,10 +69,10 @@ function getOneDayWeather(latitude, longitude) {
       <div class="card-body text-success">
         <h5 class="card-title">${city_name}</h5>
         <p class="card-text">${currentStatus}</p>
-        <p class="card-text">${currentTemp}</p>
+        <p class="card-text">${currentTemp}F</p>
         <p class="card-text">${currentUVI}</p>
-        <p class="card-text">${currentHumidity}</p>
-        <p class="card-text">${currentWindSpeed}</p>
+        <p class="card-text">${currentHumidity}%</p>
+        <p class="card-text">${currentWindSpeed}mph</p>
         <p class="card-text">${currentWindDir}</p>
         
         </div>
@@ -83,26 +89,30 @@ function getOneDayWeather(latitude, longitude) {
           var dailyHumidity = data.daily[i].humidity;
           // get day time temp
           console.log(data.daily[i].temp.day);
-          var dailyTemp = data.daily[i].temp.day;
+          var dailyTemp = Math.round(data.daily[i].temp.day);
 
           console.log(data.daily[i].uvi);
           var UVI = data.daily[i].UVI;
           // get date time
           console.log(data.daily[i].dt);
-          var dailyDateTime = data.daily[i].weather[0].main;
+          var dailyDateTime = new Date(data.daily[i].dt * 1000);
+          dailyDateTime = dailyDateTime.toLocaleDateString("en-US");
+
           //daily weather status
           console.log(data.daily[i].weather[0].main);
           var dailyStatus = data.daily[i].weather[0].main;
           // get the icon
           console.log(data.daily[i].weather[0].icon);
           var dailyIcon = data.daily[i].weather.icon;
+          var currentIconURL = `http://openweathermap.org/img/wn/${currentIconURL}@2x.png`;
 
-          var dailyWindSpeed = data.daily[i].wind_speed;
+          var dailyUVI = data.daily[i].uvi;
+          var dailyWindSpeed = Math.round(data.daily[i].wind_speed);
           var dailyWindDir = data.daily[i].wind_deg;
 
-          var dailytWeatherResults = document.createElement("div");
-          dailytWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
-      <div class="card-header bg-transparent border-success">Header</div>
+          var dailyWeatherResults = document.createElement("div");
+          dailyWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
+      <div class="card-header bg-transparent border-success">${dailyDateTime}</div>
       <div class="card-body text-success">
         <h5 class="card-title">${city_name}</h5>
         <p class="card-text">${dailyStatus}</p>
@@ -115,7 +125,7 @@ function getOneDayWeather(latitude, longitude) {
         </div>
       </div>`;
 
-          mainDiv.appendChild(currentWeatherResults);
+          mainDiv.appendChild(dailyWeatherResults);
         }
       });
     }
