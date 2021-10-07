@@ -1,16 +1,29 @@
 var my_api = "fce654b68af74729b25c434332e9b7ad";
-var city_name = "austin";
-
-var five_day_api;
-var one_call_api;
-var latitude;
-var longitude;
+var city_name;
 var part = "minutely,hourly";
 var five_day_api, one_call_api, latitude, longitude;
 var mainDiv = document.getElementById("main");
 var userInput = document.getElementById("city-name");
 var submitBtn = document.getElementById("submit");
 var savedSearches = document.getElementById("saved-searches");
+var storageList = [];
+
+var userLocalStorage = JSON.parse(localStorage.getItem("userLocalStorage"));
+
+if (userLocalStorage != null) {
+  for (var item of userLocalStorage) {
+    storageList.push(item);
+    var newListItem = document.createElement("li");
+    newListItem.setAttribute("class", "list-group-item");
+    newListItem.textContent = item;
+    newListItem.addEventListener("click", function (event) {
+      mainDiv.innerHTML = "";
+      city_name = event.target.textContent;
+      getCoordinates(city_name);
+    });
+    savedSearches.appendChild(newListItem);
+  }
+}
 
 submitBtn.addEventListener("click", function (event) {
   event.preventDefault();
@@ -30,12 +43,15 @@ submitBtn.addEventListener("click", function (event) {
   });
 
   savedSearches.append(newListItem);
+
   storageList.push(newListItem.textContent);
+
+  localStorage.setItem("userLocalStorage", JSON.stringify(storageList));
 });
 
-function getCoordinates(city_name) {
-  five_day_api = `https://api.openweathermap.org/data/2.5/forecast?q=${city_name}&appid=${my_api}`;
-
+function getCoordinates(cityName) {
+  five_day_api = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${my_api}`;
+  console.log(five_day_api);
   fetch(five_day_api).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
@@ -50,8 +66,6 @@ function getCoordinates(city_name) {
     }
   });
 }
-
-getCoordinates();
 
 function getOneDayWeather(latitude, longitude) {
   one_call_api = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=${part}&appid=${my_api}`;
@@ -86,12 +100,12 @@ function getOneDayWeather(latitude, longitude) {
         console.log(data.current.weather[0].main);
         var currentStatus = data.current.weather[0].main;
         var currentIcon = data.current.weather[0].icon;
-        var currentIconURL = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
+        var currentIconURL = `https://openweathermap.org/img/wn/${currentIcon}@2x.png`;
 
         var currentWeatherResults = document.createElement("div");
         currentWeatherResults.setAttribute(
           "class",
-          "container d-flex justify-content-center"
+          "container d-flex justify-content-center flex-wrap"
         );
         currentWeatherResults.innerHTML = `<div class="card border-success mb-3" style="min-width:30rem">
         <h5 class="card-title">${city_name}</h5>
@@ -107,7 +121,7 @@ function getOneDayWeather(latitude, longitude) {
         
         </div>
       </div>`;
-
+        mainDiv.appendChild(currentWeatherResults);
         var dailyWeatherResults = document.createElement("div");
         // apply classes and style to div
         dailyWeatherResults.setAttribute(
@@ -148,8 +162,8 @@ function getOneDayWeather(latitude, longitude) {
           var dailyWindSpeed = Math.round(data.daily[i].wind_speed);
           var dailyWindDir = data.daily[i].wind_deg;
 
-          var dailyWeatherResults = document.createElement("div");
-          dailyWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
+          var dailyWeatherDiv = document.createElement("div");
+          dailyWeatherDiv.innerHTML = `<div class="card border-success mb-3" style="min-width:10rem; max-width:10rem;">
       <div class="card-header bg-transparent border-success">${dailyDateTime}</div>
       <div> <img src= "${dailyIconURL}"></div>
       <div class="card-body text-success col-12">
@@ -160,7 +174,6 @@ function getOneDayWeather(latitude, longitude) {
         <p class="card-text">${dailyHumidity}</p>
         <p class="card-text">${dailyWindSpeed}</p>
         <p class="card-text">${dailyWindDir}</p>
-        
         </div>
       </div>`;
 
