@@ -6,9 +6,34 @@ var one_call_api;
 var latitude;
 var longitude;
 var part = "minutely,hourly";
+var five_day_api, one_call_api, latitude, longitude;
 var mainDiv = document.getElementById("main");
+var userInput = document.getElementById("city-name");
+var submitBtn = document.getElementById("submit");
+var savedSearches = document.getElementById("saved-searches");
 
-function getCoordinates() {
+submitBtn.addEventListener("click", function (event) {
+  event.preventDefault();
+  city_name = "";
+  mainDiv.innerHTML = "";
+  response = userInput.value;
+  city_name = response;
+  getCoordinates(city_name);
+
+  var newListItem = document.createElement("li");
+  newListItem.setAttribute("class", "list-group-item");
+  newListItem.textContent = city_name;
+  newListItem.addEventListener("click", function (event) {
+    mainDiv.innerHTML = "";
+    city_name = event.target.textContent;
+    getCoordinates(city_name);
+  });
+
+  savedSearches.append(newListItem);
+  storageList.push(newListItem.textContent);
+});
+
+function getCoordinates(city_name) {
   five_day_api = `https://api.openweathermap.org/data/2.5/forecast?q=${city_name}&appid=${my_api}`;
 
   fetch(five_day_api).then(function (response) {
@@ -64,11 +89,15 @@ function getOneDayWeather(latitude, longitude) {
         var currentIconURL = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
 
         var currentWeatherResults = document.createElement("div");
-        currentWeatherResults.innerHTML = `<div class="card border-success mb-3 row">
-      <div class="card-header bg-transparent border-success">Header</div>
-      <div class="card-body text-success">
-      <div><img src="${currentIconURL}" alt="Weather icon"></div>
+        currentWeatherResults.setAttribute(
+          "class",
+          "container d-flex justify-content-center"
+        );
+        currentWeatherResults.innerHTML = `<div class="card border-success mb-3" style="min-width:30rem">
         <h5 class="card-title">${city_name}</h5>
+        <div> <img src="${currentIconURL}" alt="weather icon"></div>
+      <div class="card-body text-success">
+      <p class="card-text">${currentDateTime}</p>
         <p class="card-text">${currentStatus}</p>
         <p class="card-text">${currentTemp}F</p>
         <p class="card-text">${currentUVI}</p>
@@ -79,8 +108,14 @@ function getOneDayWeather(latitude, longitude) {
         </div>
       </div>`;
 
-        mainDiv.appendChild(currentWeatherResults);
+        var dailyWeatherResults = document.createElement("div");
+        // apply classes and style to div
+        dailyWeatherResults.setAttribute(
+          "class",
+          "container d-flex justify-content-center flex-wrap"
+        );
 
+        mainDiv.appendChild(dailyWeatherResults);
         console.log(data.daily);
 
         for (var i = 1; i <= 5; i++) {
@@ -129,7 +164,7 @@ function getOneDayWeather(latitude, longitude) {
         </div>
       </div>`;
 
-          mainDiv.appendChild(dailyWeatherResults);
+          dailyWeatherResults.appendChild(dailyWeatherDiv);
         }
       });
     }
