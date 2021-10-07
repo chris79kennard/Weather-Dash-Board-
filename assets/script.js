@@ -107,17 +107,17 @@ function getOneDayWeather(latitude, longitude) {
           "class",
           "container d-flex justify-content-center flex-wrap"
         );
-        currentWeatherResults.innerHTML = `<div class="card border-success mb-3" style="min-width:30rem">
+        currentWeatherResults.innerHTML = `<div class="card border-success mb-3" style="min-width:40rem; background-color:aquamarine; color: white;">
         <h5 class="card-title">${city_name}</h5>
         <div> <img src="${currentIconURL}" alt="weather icon"></div>
       <div class="card-body text-success">
-      <p class="card-text">${currentDateTime}</p>
-        <p class="card-text">${currentStatus}</p>
-        <p class="card-text">${currentTemp}F</p>
-        <p class="card-text">${currentUVI}</p>
-        <p class="card-text">${currentHumidity}%</p>
-        <p class="card-text">${currentWindSpeed}mph</p>
-        <p class="card-text">${currentWindDir}</p>
+      <p class="card-text" style="color:white">${currentDateTime}</p>
+        <p class="card-text" style="color:white">${currentStatus}</p>
+        <p class="card-text" style="color:white">${currentTemp}F</p>
+        <p class="card-text" style="color:white">${currentUVI}</p>
+        <p class="card-text" style="color:white">${currentHumidity}%</p>
+        <p class="card-text" style="color:white">${currentWindSpeed}mph</p>
+        <p class="card-text" style="color:white">${currentWindDir}</p>
         
         </div>
       </div>`;
@@ -163,17 +163,17 @@ function getOneDayWeather(latitude, longitude) {
           var dailyWindDir = data.daily[i].wind_deg;
 
           var dailyWeatherDiv = document.createElement("div");
-          dailyWeatherDiv.innerHTML = `<div class="card border-success mb-3" style="min-width:10rem; max-width:10rem;">
-      <div class="card-header bg-transparent border-success">${dailyDateTime}</div>
+          dailyWeatherDiv.innerHTML = `<div class="card border-success mb-3" style="min-width:5rem; max-width:8rem; background-color:cadetblue;">
+      <div class="card-header bg-transparent border-success" style="color:white">${dailyDateTime}</div>
       <div> <img src= "${dailyIconURL}"></div>
       <div class="card-body text-success col-12">
-        <h5 class="card-title">${city_name}</h5>
-        <p class="card-text">${dailyStatus}</p>
-        <p class="card-text">${dailyTemp}</p>
-        <p class="card-text">${dailyUVI}</p>
-        <p class="card-text">${dailyHumidity}</p>
-        <p class="card-text">${dailyWindSpeed}</p>
-        <p class="card-text">${dailyWindDir}</p>
+        <h5 class="card-title" style="color:white">${city_name}</h5>
+        <p class="card-text" style="color:white">${dailyStatus}</p>
+        <p class="card-text" style="color:white">${dailyTemp}</p>
+        <p class="card-text" style="color:white">${dailyUVI}</p>
+        <p class="card-text" style="color:white">${dailyHumidity}</p>
+        <p class="card-text" style="color:white">${dailyWindSpeed}</p>
+        <p class="card-text" style="color:white">${dailyWindDir}</p>
         </div>
       </div>`;
 
